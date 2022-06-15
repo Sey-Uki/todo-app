@@ -1,0 +1,46 @@
+.todoList {
+  width: 900px;
+  margin: 0 auto;
+}
+
+button {
+  width: 150px;
+}
+
+.delete_btn,
+.delete_btn_disabled {
+  border-color: #ff98b9 !important;
+  background: #ff98b9 !important;
+}
+
+.delete_btn:hover {
+  border-color: #f04a7f !important;
+  background: #f04a7f !important;
+}
+
+.li_item .check {
+  margin-right: 5px;
+}
+
+.delete_img {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  color: inherit;
+  background-color: transparent;
+  width: auto;
+}
+
+.btns {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.all_btn {
+  width: auto;
+}
+
+.active_btn {
+  margin-right: 10px;
+}
