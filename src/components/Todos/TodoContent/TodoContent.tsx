@@ -5,6 +5,7 @@ import { ReactComponent as DeleteIcon } from "../../../img/delete.svg";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { TODOS_URL } from "../../../utils/constants";
 import { ITodo } from "../Todos";
+import { CheckboxChangeEvent } from "antd/lib/checkbox";
 
 const { confirm } = Modal;
 
@@ -38,17 +39,44 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
     }
   };
 
+  const handleChange = (
+    e: CheckboxChangeEvent,
+    itemId: string,
+    pos: number
+  ) => {
+    (async () => {
+      const response = await fetch(`${TODOS_URL}/${itemId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completed: e.target.checked }),
+      });
+      const updatedTodo = await response.json();
+      const copy = [...todos];
+      copy[pos] = updatedTodo;
+      setTodos(copy);
+    })();
+  };
+
   return (
     <div className={styles.todoContent}>
       <div className={styles.todoList}>
         <Divider orientation="left">List</Divider>
         <List bordered>
           {todos.length > 0 &&
-            todos.map((todo: ITodo) => {
+            todos.map((todo: ITodo, pos: number) => {
               return (
-                <List.Item className={styles.li_item} key={todo.id}>
+                <List.Item
+                  className={
+                    todo.completed ? styles.li_item_act : styles.li_item
+                  }
+                  key={todo.id}
+                >
                   <label>
-                    <Checkbox className={styles.check} />
+                    <Checkbox
+                      className={styles.check}
+                      onChange={(e) => handleChange(e, todo.id, pos)}
+                      checked={todo.completed}
+                    />
                     {todo.todo}
                   </label>
                   <button

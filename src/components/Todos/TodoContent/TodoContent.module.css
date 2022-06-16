@@ -20,8 +20,12 @@
   background: #f04a7f !important;
 }
 
-.li_item .check {
+.check {
   margin-right: 5px;
+}
+
+.li_item_act {
+  text-decoration: line-through;
 }
 
 .delete_img {
