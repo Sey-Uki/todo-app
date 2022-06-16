@@ -50,7 +50,7 @@ export const AddForm = ({ todos, setTodos }: ItodoProps) => {
             name="todo"
             rules={[{ required: true, message: "Please enter todo" }]}
           >
-            <Input placeholder="Add to do" className={styles.add_input} />
+            <Input placeholder="Add to do" className={styles.add_input} autoComplete="off"/>
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" className={styles.add_btn}>

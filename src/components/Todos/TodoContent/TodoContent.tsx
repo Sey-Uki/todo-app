@@ -1,9 +1,12 @@
 import styles from "./TodoContent.module.css";
-import { Button, Divider, List, Checkbox } from "antd";
+import { Button, Divider, List, Checkbox, Modal } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { ReactComponent as DeleteIcon } from "../../../img/delete.svg";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { TODOS_URL } from "../../../utils/constants";
 import { ITodo } from "../Todos";
+
+const { confirm } = Modal;
 
 interface ItodoProps {
   todos: ITodo[];
@@ -11,9 +14,7 @@ interface ItodoProps {
 }
 
 export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
-
   useEffect(() => {
-
     (async () => {
       const response = await fetch(TODOS_URL);
       const todosArray = await response.json();
@@ -21,6 +22,21 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
       setTodos(todosArray);
     })();
   }, [setTodos]);
+
+  const deleteTodo = (itemId: string) => {
+    if (itemId) {
+      confirm({
+        title: "Are you sure?",
+        icon: <ExclamationCircleOutlined />,
+        okType: "danger",
+        onOk() {
+          (async () =>
+            await fetch(`${TODOS_URL}/${itemId}`, { method: "DELETE" }))();
+          setTodos(todos.filter((todo) => todo.id !== itemId));
+        },
+      });
+    }
+  };
 
   return (
     <div className={styles.todoContent}>
@@ -35,7 +51,10 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
                     <Checkbox className={styles.check} />
                     {todo.todo}
                   </label>
-                  <button className={styles.delete_img}>
+                  <button
+                    className={styles.delete_img}
+                    onClick={() => deleteTodo(todo.id)}
+                  >
                     <DeleteIcon />
                   </button>
                 </List.Item>

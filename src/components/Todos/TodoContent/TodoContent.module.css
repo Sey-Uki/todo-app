@@ -3,7 +3,9 @@
   margin: 0 auto;
 }
 
-button {
+.delete_btn,
+.active_btn,
+.completed_btn {
   width: 150px;
 }
 
