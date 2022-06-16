@@ -1,26 +1,26 @@
 import styles from "./TodoContent.module.css";
 import { Button, Divider, List, Checkbox } from "antd";
 import { ReactComponent as DeleteIcon } from "../../../img/delete.svg";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { TODOS_URL } from "../../../utils/constants";
+import { ITodo } from "../Todos";
 
-interface ITodo {
-  id: string;
-  todo: string;
-  completed: boolean;
+interface ItodoProps {
+  todos: ITodo[];
+  setTodos: Dispatch<SetStateAction<ITodo[]>>;
 }
 
-export const TodoContent = () => {
-  const [todos, setTodos] = useState<ITodo[]>([]);
+export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
 
   useEffect(() => {
+
     (async () => {
       const response = await fetch(TODOS_URL);
       const todosArray = await response.json();
 
       setTodos(todosArray);
     })();
-  }, []);
+  }, [setTodos]);
 
   return (
     <div className={styles.todoContent}>
