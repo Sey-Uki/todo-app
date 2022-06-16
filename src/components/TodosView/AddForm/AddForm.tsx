@@ -4,12 +4,11 @@ import { ITodo } from "../TodosView";
 import { Dispatch, SetStateAction } from "react";
 import { createTodo } from "../../../utils/queries";
 
-interface ItodoProps {
-  todos: ITodo[];
+interface IAddFormProps {
   setTodos: Dispatch<SetStateAction<ITodo[]>>;
 }
 
-export const AddForm = ({ todos, setTodos }: ItodoProps) => {
+export const AddForm = ({ setTodos }: IAddFormProps) => {
   const [form] = Form.useForm();
 
   const handleSubmit = async ({ todo }: { todo: string }) => {

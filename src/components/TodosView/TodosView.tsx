@@ -12,7 +12,7 @@ export const TodosView = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
   return (
     <div className="todos">
-      <AddForm todos={todos} setTodos={setTodos} />
+      <AddForm setTodos={setTodos} />
       <TodoContent todos={todos} setTodos={setTodos} />
     </div>
   );

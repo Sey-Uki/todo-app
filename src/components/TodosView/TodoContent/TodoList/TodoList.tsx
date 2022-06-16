@@ -3,20 +3,21 @@ import { List, Checkbox } from "antd";
 import { ReactComponent as DeleteIcon } from "../../../../img/delete.svg";
 import { ITodo } from "../../TodosView";
 import { CheckboxChangeEvent } from "antd/lib/checkbox";
+import React from "react";
 
-interface ItodoListProps {
+interface ITodoListProps {
   todo: ITodo;
-  handleChange: (e: CheckboxChangeEvent, id: string, todoIndex: number) => void;
+  handleCheckboxChange: (e: CheckboxChangeEvent, id: string, todoIndex: number) => void;
   deleteTodo: (id: string) => void;
   todoIndex: number;
 }
 
-export const TodoList = ({
+const TodoListMemoized = ({
   todo,
-  handleChange,
+  handleCheckboxChange,
   deleteTodo,
   todoIndex,
-}: ItodoListProps) => {
+}: ITodoListProps) => {
   return (
     <div className={styles.list}>
       <List.Item
@@ -26,7 +27,7 @@ export const TodoList = ({
         <label>
           <Checkbox
             className={styles.check}
-            onChange={(e) => handleChange(e, todo.id, todoIndex)}
+            onChange={(e) => handleCheckboxChange(e, todo.id, todoIndex)}
             checked={todo.completed}
           />
           {todo.todo}
@@ -42,3 +43,5 @@ export const TodoList = ({
     </div>
   );
 };
+
+export const TodoList = React.memo(TodoListMemoized);

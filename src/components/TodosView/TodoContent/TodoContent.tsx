@@ -1,7 +1,14 @@
 import styles from "./TodoContent.module.css";
 import { Divider, List, Modal, Spin } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { ITodo } from "../TodosView";
 import { CheckboxChangeEvent } from "antd/lib/checkbox";
 import { TodosButtons } from "./TodosButtons/TodosButtons";
@@ -15,18 +22,24 @@ import {
 
 const { confirm } = Modal;
 
-interface ItodoProps {
+interface ITodoContentProps {
   todos: ITodo[];
   setTodos: Dispatch<SetStateAction<ITodo[]>>;
 }
 
-export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
+export const TodoContent = ({ todos, setTodos }: ITodoContentProps) => {
   const [isCompletedList, setIsCompletedList] = useState(false);
   const [isActiveList, setIsActiveList] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const activeList = useMemo(() => todos.filter((todo) => !todo.completed), [todos]);
-  const completedList = useMemo(() => todos.filter((todo) => todo.completed), [todos]);
+  const activeList = useMemo(
+    () => todos.filter((todo) => !todo.completed),
+    [todos]
+  );
+  const completedList = useMemo(
+    () => todos.filter((todo) => todo.completed),
+    [todos]
+  );
 
   const currentList = useMemo(() => {
     if (isActiveList) return activeList;
@@ -41,7 +54,7 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
     fetchTodos(setTodos, setIsLoading);
   }, [setTodos]);
 
-  const deleteTodo = (itemId: string) => {
+  const deleteTodo = useCallback((itemId: string) => {
     if (itemId) {
       confirm({
         title: "Are you sure?",
@@ -52,9 +65,9 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
         },
       });
     }
-  };
+  }, [setTodos]);
 
-  const deleteCompletedTodos = () => {
+  const deleteCompletedTodos = useCallback(() => {
     confirm({
       title: "Are you sure?",
       icon: <ExclamationCircleOutlined />,
@@ -63,17 +76,16 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
         deleteMultipleTodos(setTodos, todos);
       },
     });
-  };
+  }, [setTodos, todos]);
 
-  const handleCheckboxChange = (
-    e: CheckboxChangeEvent,
-    itemId: string,
-    todoIndex: number
-  ) => {
-    editTodo(itemId, setTodos, todos, todoIndex, e);
-  };
+  const handleCheckboxChange = useCallback(
+    (e: CheckboxChangeEvent, itemId: string, todoIndex: number) => {
+      editTodo(itemId, setTodos, todos, todoIndex, e);
+    },
+    [setTodos, todos]
+  );
 
-  if (isLoading) return <Spin className={styles.spin} tip="Loading..." />
+  if (isLoading) return <Spin className={styles.spin} tip="Loading..." />;
 
   return (
     <div className={styles.todoContent}>
@@ -92,7 +104,7 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
               return (
                 <TodoList
                   todo={todo}
-                  handleChange={handleCheckboxChange}
+                  handleCheckboxChange={handleCheckboxChange}
                   deleteTodo={deleteTodo}
                   todoIndex={index}
                   key={todo.id}

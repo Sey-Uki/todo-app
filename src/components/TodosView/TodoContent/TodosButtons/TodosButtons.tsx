@@ -2,7 +2,7 @@ import { Button } from "antd";
 import { Dispatch, SetStateAction } from "react";
 import styles from "./TodosButtons.module.css";
 
-interface IbtnsProps {
+interface ITodosButtonsProps {
   isCompletedList: boolean;
   setIsCompletedList: Dispatch<SetStateAction<boolean>>;
   isActiveList: boolean;
@@ -16,7 +16,7 @@ export const TodosButtons = ({
   isActiveList,
   setIsActiveList,
   deleteCompletedTodos,
-}: IbtnsProps) => {
+}: ITodosButtonsProps) => {
   const handleChangeCompleted = () => {
     setIsCompletedList(!isCompletedList);
     setIsActiveList(false);
