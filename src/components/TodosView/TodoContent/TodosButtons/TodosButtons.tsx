@@ -7,7 +7,7 @@ interface IbtnsProps {
   setIsCompletedList: Dispatch<SetStateAction<boolean>>;
   isActiveList: boolean;
   setIsActiveList: Dispatch<SetStateAction<boolean>>;
-  deleteCompletedTodo: () => void;
+  deleteCompletedTodos: () => void;
 }
 
 export const TodosButtons = ({
@@ -15,7 +15,7 @@ export const TodosButtons = ({
   setIsCompletedList,
   isActiveList,
   setIsActiveList,
-  deleteCompletedTodo,
+  deleteCompletedTodos,
 }: IbtnsProps) => {
   const handleChangeCompleted = () => {
     setIsCompletedList(!isCompletedList);
@@ -54,7 +54,7 @@ export const TodosButtons = ({
         type="primary"
         danger
         className={styles.delete_btn}
-        onClick={deleteCompletedTodo}
+        onClick={deleteCompletedTodos}
       >
         Clear completed
       </Button>

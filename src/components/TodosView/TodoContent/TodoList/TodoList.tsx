@@ -1,21 +1,21 @@
 import styles from "./TodoList.module.css";
 import { List, Checkbox } from "antd";
 import { ReactComponent as DeleteIcon } from "../../../../img/delete.svg";
-import { ITodo } from "../../Todos";
+import { ITodo } from "../../TodosView";
 import { CheckboxChangeEvent } from "antd/lib/checkbox";
 
 interface ItodoListProps {
   todo: ITodo;
-  handleChange: (e: CheckboxChangeEvent, id: string, pos: number) => void;
+  handleChange: (e: CheckboxChangeEvent, id: string, todoIndex: number) => void;
   deleteTodo: (id: string) => void;
-  pos: number;
+  todoIndex: number;
 }
 
 export const TodoList = ({
   todo,
   handleChange,
   deleteTodo,
-  pos,
+  todoIndex,
 }: ItodoListProps) => {
   return (
     <div className={styles.list}>
@@ -26,7 +26,7 @@ export const TodoList = ({
         <label>
           <Checkbox
             className={styles.check}
-            onChange={(e) => handleChange(e, todo.id, pos)}
+            onChange={(e) => handleChange(e, todo.id, todoIndex)}
             checked={todo.completed}
           />
           {todo.todo}

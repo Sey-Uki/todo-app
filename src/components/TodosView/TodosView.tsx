@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { AddForm } from "./AddForm/AddForm";
 import { TodoContent } from "./TodoContent/TodoContent";
-import styles from "./Todos.module.css";
 
 export interface ITodo {
   id: string;
@@ -9,10 +8,10 @@ export interface ITodo {
   completed: boolean;
 }
 
-export const Todos = () => {
+export const TodosView = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
   return (
-    <div className={styles.todos}>
+    <div className="todos">
       <AddForm todos={todos} setTodos={setTodos} />
       <TodoContent todos={todos} setTodos={setTodos} />
     </div>

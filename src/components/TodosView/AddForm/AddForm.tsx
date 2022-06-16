@@ -1,8 +1,8 @@
 import styles from "./AddForm.module.css";
 import { Button, Input, Form } from "antd";
-import { TODOS_URL } from "../../../utils/constants";
-import { ITodo } from "../Todos";
+import { ITodo } from "../TodosView";
 import { Dispatch, SetStateAction } from "react";
+import { createTodo } from "../../../utils/queries";
 
 interface ItodoProps {
   todos: ITodo[];
@@ -12,26 +12,9 @@ interface ItodoProps {
 export const AddForm = ({ todos, setTodos }: ItodoProps) => {
   const [form] = Form.useForm();
 
-  const handleSubmit = ({ todo }: { todo: string }) => {
+  const handleSubmit = async ({ todo }: { todo: string }) => {
     const newTodo = { todo, completed: false };
-
-    (async () => {
-      const response = await fetch(TODOS_URL, {
-        method: "POST",
-        body: JSON.stringify(newTodo),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const createdTodo = await response.json();
-
-      if (response.ok) {
-        setTodos([...todos, createdTodo]);
-      }
-    })();
-
-    form.resetFields();
+    createTodo(newTodo, setTodos).then(() => form.resetFields());
   };
 
   return (
@@ -50,7 +33,11 @@ export const AddForm = ({ todos, setTodos }: ItodoProps) => {
             name="todo"
             rules={[{ required: true, message: "Please enter todo" }]}
           >
-            <Input placeholder="Add to do" className={styles.add_input} autoComplete="off"/>
+            <Input
+              placeholder="Add to do"
+              className={styles.add_input}
+              autoComplete="off"
+            />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" className={styles.add_btn}>
