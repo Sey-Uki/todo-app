@@ -43,6 +43,26 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
     }
   };
 
+  const deleteCompletedTodo = () => {
+    confirm({
+      title: "Are you sure?",
+      icon: <ExclamationCircleOutlined />,
+      okType: "danger",
+      onOk() {
+        todos.forEach((item) => {
+          if (item.completed) {
+            (async () =>
+              await fetch(`${TODOS_URL}/${item.id}`, {
+                method: "DELETE",
+              }))().then(() => {
+              setTodos(todos.filter((todo) => !todo.completed));
+            });
+          }
+        });
+      },
+    });
+  };
+
   const handleChange = (
     e: CheckboxChangeEvent,
     itemId: string,
@@ -70,6 +90,7 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
           setIsCompletedList={setIsCompletedList}
           isActiveList={isActiveList}
           setIsActiveList={setIsActiveList}
+          deleteCompletedTodo={deleteCompletedTodo}
         />
         <List bordered>
           {todos.length > 0 &&
@@ -81,6 +102,7 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
                     handleChange={handleChange}
                     deleteTodo={deleteTodo}
                     pos={pos}
+                    key={todo.id}
                   />
                 )
               ) : isActiveList ? (
@@ -90,6 +112,7 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
                     handleChange={handleChange}
                     deleteTodo={deleteTodo}
                     pos={pos}
+                    key={todo.id}
                   />
                 )
               ) : (
@@ -98,6 +121,7 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
                   handleChange={handleChange}
                   deleteTodo={deleteTodo}
                   pos={pos}
+                  key={todo.id}
                 />
               );
             })}
