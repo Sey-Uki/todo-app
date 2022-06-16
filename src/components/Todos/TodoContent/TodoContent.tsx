@@ -1,11 +1,12 @@
 import styles from "./TodoContent.module.css";
-import { Button, Divider, List, Checkbox, Modal } from "antd";
+import { Divider, List, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { ReactComponent as DeleteIcon } from "../../../img/delete.svg";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TODOS_URL } from "../../../utils/constants";
 import { ITodo } from "../Todos";
 import { CheckboxChangeEvent } from "antd/lib/checkbox";
+import { TodosButtons } from "./TodosButtons/TodosButtons";
+import { TodoList } from "./TodoList/TodoList";
 
 const { confirm } = Modal;
 
@@ -15,6 +16,9 @@ interface ItodoProps {
 }
 
 export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
+  const [isCompletedList, setIsCompletedList] = useState(false);
+  const [isActiveList, setIsActiveList] = useState(false);
+
   useEffect(() => {
     (async () => {
       const response = await fetch(TODOS_URL);
@@ -61,46 +65,43 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
     <div className={styles.todoContent}>
       <div className={styles.todoList}>
         <Divider orientation="left">List</Divider>
+        <TodosButtons
+          isCompletedList={isCompletedList}
+          setIsCompletedList={setIsCompletedList}
+          isActiveList={isActiveList}
+          setIsActiveList={setIsActiveList}
+        />
         <List bordered>
           {todos.length > 0 &&
             todos.map((todo: ITodo, pos: number) => {
-              return (
-                <List.Item
-                  className={
-                    todo.completed ? styles.li_item_act : styles.li_item
-                  }
-                  key={todo.id}
-                >
-                  <label>
-                    <Checkbox
-                      className={styles.check}
-                      onChange={(e) => handleChange(e, todo.id, pos)}
-                      checked={todo.completed}
-                    />
-                    {todo.todo}
-                  </label>
-                  <button
-                    className={styles.delete_img}
-                    onClick={() => deleteTodo(todo.id)}
-                  >
-                    <DeleteIcon />
-                  </button>
-                </List.Item>
+              return isCompletedList ? (
+                todo.completed && (
+                  <TodoList
+                    todo={todo}
+                    handleChange={handleChange}
+                    deleteTodo={deleteTodo}
+                    pos={pos}
+                  />
+                )
+              ) : isActiveList ? (
+                !todo.completed && (
+                  <TodoList
+                    todo={todo}
+                    handleChange={handleChange}
+                    deleteTodo={deleteTodo}
+                    pos={pos}
+                  />
+                )
+              ) : (
+                <TodoList
+                  todo={todo}
+                  handleChange={handleChange}
+                  deleteTodo={deleteTodo}
+                  pos={pos}
+                />
               );
             })}
         </List>
-        <div className={styles.btns}>
-          <Button className={styles.all_btn} type="primary" ghost>
-            All
-          </Button>
-          <div>
-            <Button className={styles.active_btn}>Active</Button>
-            <Button className={styles.completed_btn}>Completed</Button>
-          </div>
-          <Button type="primary" danger className={styles.delete_btn}>
-            Clear completed
-          </Button>
-        </div>
       </div>
     </div>
   );
