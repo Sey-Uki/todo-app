@@ -1,5 +1,5 @@
 import styles from "./TodoContent.module.css";
-import { Divider, List, Modal } from "antd";
+import { Divider, List, Modal, Spin } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { ITodo } from "../TodosView";
@@ -23,6 +23,7 @@ interface ItodoProps {
 export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
   const [isCompletedList, setIsCompletedList] = useState(false);
   const [isActiveList, setIsActiveList] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const activeList = useMemo(() => todos.filter((todo) => !todo.completed), [todos]);
   const completedList = useMemo(() => todos.filter((todo) => todo.completed), [todos]);
@@ -36,7 +37,8 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
   }, [activeList, completedList, isActiveList, isCompletedList, todos]);
 
   useEffect(() => {
-    fetchTodos(setTodos);
+    setIsLoading(true);
+    fetchTodos(setTodos, setIsLoading);
   }, [setTodos]);
 
   const deleteTodo = (itemId: string) => {
@@ -70,6 +72,8 @@ export const TodoContent = ({ todos, setTodos }: ItodoProps) => {
   ) => {
     editTodo(itemId, setTodos, todos, todoIndex, e);
   };
+
+  if (isLoading) return <Spin className={styles.spin} tip="Loading..." />
 
   return (
     <div className={styles.todoContent}>

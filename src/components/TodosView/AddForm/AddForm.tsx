@@ -20,7 +20,7 @@ export const AddForm = ({ todos, setTodos }: ItodoProps) => {
   return (
     <div className={styles.addForm}>
       <div className={styles.header_wrapper}>
-        <h1 className={styles.title}>To Do</h1>
+        <h1 className={styles.title}>Todo List</h1>
       </div>
       <div className={styles.form_wrapper}>
         <Form

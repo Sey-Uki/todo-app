@@ -4,12 +4,14 @@ import { TODOS_URL } from "./constants";
 import { CheckboxChangeEvent } from "antd/lib/checkbox";
 
 export const fetchTodos = async (
-  setTodos: Dispatch<SetStateAction<ITodo[]>>
+  setTodos: Dispatch<SetStateAction<ITodo[]>>,
+  setIsLoading: Dispatch<SetStateAction<boolean>>
 ) => {
   const response = await fetch(TODOS_URL);
   const todosArray = await response.json();
 
   setTodos(todosArray);
+  setIsLoading(false);
 };
 
 export const createTodo = async (
